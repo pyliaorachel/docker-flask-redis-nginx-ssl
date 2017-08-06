@@ -1,0 +1,24 @@
+version: '3'
+services:
+  nginx:
+    build: ./nginx/
+    container_name: examplenginx 
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - flaskapp:exampleflask
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+  flaskapp:
+    build: ./flaskapp/
+    container_name: exampleflask
+    expose:
+      - "8080"
+    links:
+      - redis:exampleredis
+  redis:
+    build: ./redisdb/
+    container_name: exampleredis
+    expose:
+      - "6379"
