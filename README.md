@@ -23,8 +23,7 @@ Docker example running flask app, redis db, and nginx proxy server with ssl.
         ├── nginx
         │   ├── Dockerfile
         │   ├── __init__.py
-        │   ├── nginx-ssl.conf.sample
-        │   └── nginx.conf.sample
+        │   └── nginx.conf
         └── redisdb
             ├── Dockerfile
             ├── __init__.py
