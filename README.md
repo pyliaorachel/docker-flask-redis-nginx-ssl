@@ -4,9 +4,31 @@ Docker example running flask app, redis db, and nginx proxy server with ssl.
 
 ## Init Project
 
-1. Create project named `example`
+1. Create project named `example` with the structure below
     ```shell
-    [tree]
+    .
+    ├── README.md
+    └── src
+        ├── docker-compose.yml
+        ├── flaskapp
+        │   ├── Dockerfile
+        │   ├── __init__.py
+        │   ├── example
+        │   │   ├── __init__.py
+        │   │   ├── app.py
+        │   │   ├── db.py
+        │   │   └── wsgi.py
+        │   ├── requirements.txt
+        │   └── setup.py
+        ├── nginx
+        │   ├── Dockerfile
+        │   ├── __init__.py
+        │   ├── nginx-ssl.conf.sample
+        │   └── nginx.conf.sample
+        └── redisdb
+            ├── Dockerfile
+            ├── __init__.py
+            └── redis.conf
     ```
 2. Create `virtualenv` for each container
     ```shell
