@@ -99,7 +99,7 @@ See `src/flaskapp/example/db.py`.
     # Start the server on default port `6397`
     $ redis-server
 
-    # Test at `src/`, since `docker-compose.yml` will be here
+    # Start the flask app
     (venv) $ cd src
     (venv) $ gunicorn --bind 0.0.0.0:8080 flaskapp.example.wsgi
 
@@ -131,18 +131,20 @@ See `src/redisdb/Dockerfile` and `src/redisdb/redis.conf`.
     ```shell
     $ docker stop exampleredis
 
-    # No need to publish port, as the port is `EXPOSE`d to other containers in the same docker network in `Dockerfile`
+    # No need to publish port, as the port is `EXPOSE`d in `Dockerfile` to other containers in the same docker network
     $ docker run -d --rm --net example --name exampleredis yourusername/exampleredis
     ```
 - Test
     - Open browser and go to `localhost:8080/<your-name>`. You should see `Hello <your-name>!`.
 
-_Note_ that `Dockerfile` is needed only when you can want to use your customized redis server configuration written in `redis.conf`. 
+_Note_ that `Dockerfile` is needed only when you want to use your customized redis server configuration written in `redis.conf`. 
 If you don't need a customized configuration, you don't need to build a new image yourself and can simply use the base image of `redis`:
 
 ```shell
 $ docker run -d --rm --net example --name exampleredis redis redis-server
 ```
+
+Then modify `docker-compose.yml` accordingly.
 
 _Note_ that `bind 127.0.0.1` in the `redis.conf` file __SHOULD__ be changed into `bind 0.0.0.0` or else other containers still cannot access the redis server.
 
@@ -163,9 +165,9 @@ See `src/nginx/Dockerfile`.
 - Build image with tag `yourusername/examplenginx`
     ```shell
     $ cd nginx
-    $ docker build --rm -t yourusername/examplenginx
+    $ docker build -t yourusername/examplenginx .
     ```
-- Run container on image `yourusername/examplenginx` with name `examplenginx`, publish port `80` (and `443` for `HTTPS`). (_Note that -p 8080:8080 is not needed anymore in the flask app container, as we will not access this port directly from the browser anymore but instead access the nginx proxy server_)
+- Run container on image `yourusername/examplenginx` with name `examplenginx`, publish port `80` (and `443` for `HTTPS`). (_Note that -p 8080:8080 is not needed anymore in starting the flask app container, as we will not access this port directly from the browser anymore but instead access this nginx proxy server_)
     ```shell
     # HTTP
     $ docker run -d --rm --net example -p 80:80 --name examplenginx yourusername/examplenginx
@@ -182,7 +184,7 @@ See `src/nginx/Dockerfile`.
 
 ## Wrap up the Project with Docker Compose
 
-After testing individual containers, you can wrap all the commands up into the `docker-compose.yml` file, and everything can be started in a single command. Docker network is not needed anymore, as docker compose creates a default network for all its services. But to build up a more complex network topology, you can create your custom networks in the `docker-compose.yml` file as well.
+After testing individual containers, you can wrap all the commands up into a single`docker-compose.yml` file, and everything can be started in a single command. Docker network is not needed anymore, as docker compose creates a default network for all its services. But to build up a more complex network topology, you can create your custom networks in the `docker-compose.yml` file as well.
 
 ###### [Deploy with Docker Compose](https://runnable.com/docker/docker-compose-networking)
 
